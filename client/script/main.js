@@ -171,7 +171,7 @@ const App = new Vue({
       this.hls = new Hls();
       this.hls.loadSource(this.videoSrc);
       this.hls.attachMedia(this.player);
-    } else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+    } else if (this.player.canPlayType('application/vnd.apple.mpegurl')) {
       this.player.src = this.videoSrc;
       this.player.addEventListener('loadedmetadata', function () {
         this.player.play();
