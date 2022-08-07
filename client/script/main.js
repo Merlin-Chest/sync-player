@@ -174,7 +174,7 @@ const App = new Vue({
     } else if (player.canPlayType('application/vnd.apple.mpegurl')) {
       this.player.src = this.videoSrc;
       this.player.addEventListener('loadedmetadata', function () {
-        video.play();
+        this.player.play();
       });
     }
 
