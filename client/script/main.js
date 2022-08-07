@@ -171,8 +171,11 @@ const App = new Vue({
       this.hls = new Hls();
       this.hls.loadSource(this.videoSrc);
       this.hls.attachMedia(this.player);
-    }  else if (player.canPlayType('application/vnd.apple.mpegurl')) {
-      player.src = videoSrc;
+    } else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+      player.src = this.videoSrc;
+      player.addEventListener('loadedmetadata', function () {
+        video.play();
+      });
     }
 
     /*使用socket-io*/
