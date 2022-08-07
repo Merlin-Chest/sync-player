@@ -9,7 +9,7 @@ const App = new Vue({
     hls: null,
     goEasyConnect: null,
     videoList: [],
-    videoSrc: 'https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8',
+    videoSrc: '',
     playing: false,
     controlParam: {
       user: '',
