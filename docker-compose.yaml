@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  sync-video:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    labels:
+      # 设置Host 为 localhost 进行域名访问
+      - traefik.http.routers.sync-video.rule=Host(`sync-video.merlin218.top`)
+      # 开启HTTPS
+      - traefik.http.routers.sync-video.tls=true
+      - traefik.http.routers.sync-video.tls.certresolver=le
+
+networks:
+  default:
+    external:
+      name: traefik_default
