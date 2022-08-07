@@ -23,9 +23,9 @@ const App = new Vue({
 
     // leancloud-realtime 添加以下变量，appId、appKey、server这几个值去leancloud控制台>设置>应用凭证里面找
     chatRoom: null,
-    appId: '*******************',
-    appKey: '*******************',
-    server: 'https://*******************.***.com', // REST API 服务器地址
+    appId: 'vQW0I5lmCU0yXXTYMH86XRoH-gzGzoHsz',
+    appKey: 'rYJVNBxN7EPrjKJHnl9CJqAV',
+    server: 'https://vqw0i5lm.lc-cn-n1-shared.com', // REST API 服务器地址
   },
   methods: {
     randomString(length) {
@@ -42,7 +42,7 @@ const App = new Vue({
       localStorage.setItem('videoList', JSON.stringify(this.videoList))
     },
     playVideoItem(src) {
-      if(src.includes('.m3u8')){
+      if (src.includes('.m3u8')) {
         this.hls.loadSource(src);
         this.hls.attachMedia(this.player);
       } else {
@@ -85,7 +85,7 @@ const App = new Vue({
       this.controlParam.time = this.player.currentTime
       this.sendMessage(this.controlParam)
     },
-    sendMessage(controlParam){
+    sendMessage(controlParam) {
       const params = JSON.stringify(controlParam)
 
       // 使用socket-io
@@ -128,25 +128,25 @@ const App = new Vue({
       return false;
     },
     // 设置 url 参数
-    setParam(param,val){
+    setParam(param, val) {
       var stateObject = 0;
-      var title="0"
+      var title = "0"
       var oUrl = window.location.href.toString();
       var nUrl = "";
-      var pattern=param+'=([^&]*)';
-      var replaceText=param+'='+val; 
-      if(oUrl.match(pattern)){
-          var tmp='/('+ param+'=)([^&]*)/gi';
-          tmp=oUrl.replace(eval(tmp),replaceText);
-          nUrl = tmp;
-      }else{ 
-          if(oUrl.match('[\?]')){ 
-            nUrl = oUrl+'&'+replaceText; 
-          }else{ 
-            nUrl = oUrl+'?'+replaceText; 
-          } 
+      var pattern = param + '=([^&]*)';
+      var replaceText = param + '=' + val;
+      if (oUrl.match(pattern)) {
+        var tmp = '/(' + param + '=)([^&]*)/gi';
+        tmp = oUrl.replace(eval(tmp), replaceText);
+        nUrl = tmp;
+      } else {
+        if (oUrl.match('[\?]')) {
+          nUrl = oUrl + '&' + replaceText;
+        } else {
+          nUrl = oUrl + '?' + replaceText;
+        }
       }
-      history.replaceState(stateObject,title,nUrl);
+      history.replaceState(stateObject, title, nUrl);
     }
   },
   created() {
@@ -159,11 +159,11 @@ const App = new Vue({
 
     const currentPlayVideo = localStorage.getItem('currentPlayVideo')
 
-    if(currentPlayVideo){
+    if (currentPlayVideo) {
       this.videoSrc = currentPlayVideo
     }
 
-    if(this.getParam("url")){
+    if (this.getParam("url")) {
       this.videoSrc = decodeURIComponent(this.getParam("url"))
     }
 
@@ -228,25 +228,25 @@ const App = new Vue({
 
     //换成你自己的一个房间的 conversation id（这是服务器端生成的），第一次执行代码就会生成，在leancloud控制台>即时通讯>对话下面，复制一个过来即可
 
-    var roomId = this.getParam("id")?this.getParam("id"):'***********'
+    var roomId = this.getParam("id") ? this.getParam("id") : '62ef0800a7de277dbe9b7996'
 
     // 每个客户端自定义的 id
 
     var client, room
 
-    realtime.createIMClient(this.userId).then(function(c) {
+    realtime.createIMClient(this.userId).then(function (c) {
       console.log('连接成功')
       client = c
-      client.on('disconnect', function() {
+      client.on('disconnect', function () {
         console.log('[disconnect] 服务器连接已断开')
       })
-      client.on('offline', function() {
+      client.on('offline', function () {
         console.log('[offline] 离线（网络连接已断开）')
       })
-      client.on('online', function() {
+      client.on('online', function () {
         console.log('[online] 已恢复在线')
       })
-      client.on('schedule', function(attempt, time) {
+      client.on('schedule', function (attempt, time) {
         console.log(
           '[schedule] ' +
           time / 1000 +
@@ -255,19 +255,19 @@ const App = new Vue({
           ' 次重连'
         )
       })
-      client.on('retry', function(attempt) {
+      client.on('retry', function (attempt) {
         console.log('[retry] 正在进行第 ' + (attempt + 1) + ' 次重连')
       })
-      client.on('reconnect', function() {
+      client.on('reconnect', function () {
         console.log('[reconnect] 重连成功')
       })
-      client.on('reconnecterror', function() {
+      client.on('reconnecterror', function () {
         console.log('[reconnecterror] 重连失败')
       })
       // 获取对话
       return c.getConversation(roomId)
     })
-      .then(function(conversation) {
+      .then(function (conversation) {
         if (conversation) {
           return conversation
         } else {
@@ -279,7 +279,7 @@ const App = new Vue({
               // 创建暂态的聊天室（暂态聊天室支持无限人员聊天）
               transient: true,
             })
-            .then(function(conversation) {
+            .then(function (conversation) {
               roomId = conversation.id
               console.log('创建新 Room 成功，id 是：', roomId)
               that.setParam("id", roomId)
@@ -287,20 +287,20 @@ const App = new Vue({
             })
         }
       })
-      .then(function(conversation) {
+      .then(function (conversation) {
         return conversation.join()
       })
-      .then(function(conversation) {
+      .then(function (conversation) {
         // 获取聊天历史
         room = conversation;
         that.chatRoom = conversation
         // 房间接受消息
-        room.on('message', function(message) {
+        room.on('message', function (message) {
           const result = JSON.parse(message._lctext)
           that.resultHandler(result)
         });
       })
-      .catch(function(err) {
+      .catch(function (err) {
         console.error(err);
         console.log('错误：' + err.message);
       });
